@@ -8,7 +8,6 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
-import { Dispatch, SetStateAction } from "react";
 import { News } from "./models";
 
 const firebaseConfig = {
@@ -26,34 +25,14 @@ export const saveNews = async (news: News) => {
   ).then((docRef) => console.log("Document written with ID: ", docRef.id));
 };
 
-export const listenToNewList = (
-  setNewsList: Dispatch<SetStateAction<News[] | undefined>>,
-  globalHolder: { firstRequest: boolean }
-) => {
+export const listenToNewsList = (handleNewsData: any) => {
   const newsQuery = query(
     collection(db, "firebase-demo"),
     orderBy("timestamp", "desc"),
     limit(3)
   );
-  onSnapshot(
-    newsQuery,
-    (querySnapshot) => {
-      if (
-        !globalHolder.firstRequest &&
-        !querySnapshot.metadata.hasPendingWrites
-      ) {
-        return;
-      }
-      const newsData: News[] = [];
-      querySnapshot.forEach((doc) => {
-        const { author, title, body, timestamp } = doc.data();
-        newsData.push(new News(author, title, body, timestamp));
-      });
-      setNewsList(newsData);
-      globalHolder.firstRequest = false;
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+  const unsubscribe = onSnapshot(newsQuery, handleNewsData, (error: any) => {
+    console.log(error);
+  });
+  return unsubscribe;
 };

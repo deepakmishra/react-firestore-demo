@@ -1,16 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NewsComponent, NewsForm } from "./components";
 import "./globals.css";
-import { listenToNewList } from "./db";
+import { listenToNewsList } from "./db";
 import { News } from "./models";
 
 export default function Home() {
   const [newsList, setNewsList] = useState<News[]>();
-  const [globalHolder, _] = useState({ firstRequest: true });
 
-  listenToNewList(setNewsList, globalHolder);
+  const handleNewsData = (querySnapshot: { docs: any[] }) => {
+    const newsData: News[] = querySnapshot.docs.map((doc) => {
+      const { author, title, body, timestamp } = doc.data();
+      return new News(author, title, body, timestamp.toDate());
+    });
+    setNewsList(newsData);
+  };
+
+  useEffect(() => {
+    const unsubscribe = listenToNewsList(handleNewsData);
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div>
