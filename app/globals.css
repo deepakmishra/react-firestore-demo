@@ -24,6 +24,73 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+
+  h1 {
+    margin: 10px;
+    width: 50%;
+    font-size: 2rem;
+    font-style: bold;
+  }
+
+  input,
+  button,
+  textarea {
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #555;
+  }
+
+  input:focus {
+    border-color: lightblue;
+  }
+
+  .news-form {
+    border: black 1px solid;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 10px;
+    width: 800px;
+
+    span {
+      display: inline-block;
+      text-align: right;
+      width: 20%;
+      margin: 10px;
+    }
+    input,
+    textarea {
+      width: 70%;
+    }
+    button {
+      width: 100%;
+    }
+  }
+
+  .news-item {
+    border: black 1px solid;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 10px;
+    width: 800px;
+    position: relative;
+
+    .news-author {
+      position: absolute;
+      margin: 0;
+      padding: 10px;
+      font-style: oblique;
+      font-size: 0.8rem;
+      right: 0;
+      bottom: 0;
+    }
+
+    .news-title {
+      font-style: bold;
+      font-size: 1.2rem;
+    }
+  }
 }
 
 @layer utilities {
